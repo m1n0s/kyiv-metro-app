@@ -1,0 +1,8 @@
+{
+  "name": "kyiv-metro-app",
+  "version": "0.0.1",
+  "description": "Offline React Native app for Kyiv metropolitan",
+  "main": "index.js",
+  "author": "m1n0s",
+  "license": "MIT"
+}
