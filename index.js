@@ -120,19 +120,20 @@ metro.setEdge('220', '221');
 metro.setEdge('221', '222');
 metro.setEdge('222', '223');
 
-metro.setEdge('119', '314', .5);
-metro.setEdge('120', '217', .5);
-metro.setEdge('218', '315', .5);
+metro.setEdge('119', '314', 1);
+metro.setEdge('120', '217', 1);
+metro.setEdge('218', '315', 1);
 
-// https://github.com/cpettitt/graphlib/issues/42
-const nodeEdges = v => metro.nodeEdges(v);
+
+const nodeEdges = v => metro.nodeEdges(v); // https://github.com/cpettitt/graphlib/issues/42
 const weight = e => metro.edge(e);
 
 const from = '223';
-const to = '312';
+const to = '117';
 
 const ways = graphlib.alg.dijkstra(metro, from, weight, nodeEdges);
 const target = ways[to];
+console.log(ways);
 
 const stationKeys = [to];
 
@@ -145,17 +146,30 @@ do {
 } while (predecessor);
 
 const path = stationKeys.reverse();
+const pathLength = path.length;
 
-console.log(path);
+let { line: lastLine } = metro.node(from);
+
 const helpMessage = path.reduce((acc, cur, i) => {
 
   const { line, label } = metro.node(cur);
+  let phrase = 'Ride through';
 
   if (i === 0) {
-    return `${acc}Start on ${label}\n`;
+    phrase = 'Start from';
   }
 
-  return `${acc}Next go to ${label}\n`;
+  if (lastLine !== line) {
+    phrase = 'Change line to get to';
+  }
+
+  if (i === pathLength - 1) {
+    phrase = 'Get out on';
+  }
+
+  lastLine = line;
+
+  return `${acc}${phrase} ${label}\n`;
 }, '');
 
 console.log(helpMessage);
