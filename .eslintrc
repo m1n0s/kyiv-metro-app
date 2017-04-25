@@ -1,6 +1,7 @@
 {
   "extends": "airbnb",
   "rules": {
-    "arrow-parens": ["error", "as-needed"]
+    "arrow-parens": ["error", "as-needed"],
+    "no-floating-decimal": 0
   }
 }

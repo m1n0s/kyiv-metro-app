@@ -99,6 +99,8 @@ metro.setNode('223', {
   line: 'blue',
 });
 
+metro.setDefaultEdgeLabel(1);
+
 metro.setEdge('117', '118');
 metro.setEdge('118', '119');
 metro.setEdge('119', '120');
@@ -118,17 +120,18 @@ metro.setEdge('220', '221');
 metro.setEdge('221', '222');
 metro.setEdge('222', '223');
 
-metro.setEdge('119', '314');
-metro.setEdge('120', '217');
-metro.setEdge('218', '315');
+metro.setEdge('119', '314', .5);
+metro.setEdge('120', '217', .5);
+metro.setEdge('218', '315', .5);
 
 // https://github.com/cpettitt/graphlib/issues/42
 const nodeEdges = v => metro.nodeEdges(v);
+const weight = e => metro.edge(e);
 
 const from = '223';
-const to = '117';
+const to = '312';
 
-const ways = graphlib.alg.dijkstra(metro, from, null, nodeEdges);
+const ways = graphlib.alg.dijkstra(metro, from, weight, nodeEdges);
 const target = ways[to];
 
 const stationKeys = [to];
@@ -144,3 +147,15 @@ do {
 const path = stationKeys.reverse();
 
 console.log(path);
+const helpMessage = path.reduce((acc, cur, i) => {
+
+  const { line, label } = metro.node(cur);
+
+  if (i === 0) {
+    return `${acc}Start on ${label}\n`;
+  }
+
+  return `${acc}Next go to ${label}\n`;
+}, '');
+
+console.log(helpMessage);
